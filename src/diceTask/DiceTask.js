@@ -46,16 +46,16 @@ export function DiceTask() {
     apiCall(text);
   }
 
-  const onSortPress = (val,i) => {
+  const onSortPress = (val, i) => {
     const dataCopy = { ...data };
     const sortToggleCopy = [...sortToggle]
 
     if (typeof dataCopy?.items[0][val?.value] === 'number') {
 
-      if(!sortToggle[i]) {
-       dataCopy.items.sort((a, b) => a[val.value] - b[val.value]);
+      if (!sortToggle[i]) {
+        dataCopy.items.sort((a, b) => a[val.value] - b[val.value]);
       }
-      else{
+      else {
         dataCopy.items.sort((a, b) => b[val.value] - a[val.value]);
       }
       console.log('temp', val, dataCopy.items[0][val.value])
@@ -63,29 +63,29 @@ export function DiceTask() {
       setSortToggle(sortToggleCopy)
       setData(dataCopy);
     }
-    else if(val?.key === 'Name'){
-      if(!sortToggle[i]) {
+    else if (val?.key === 'Name') {
+      if (!sortToggle[i]) {
         dataCopy.items.sort((a, b) => a[val.value].localeCompare(b[val.value]));
-       }
-       else{
-         dataCopy.items.sort((a, b) => b[val.value].localeCompare(a[val.value]));
-       }
-       console.log('temp else', val, dataCopy.items[0][val.value])
-       sortToggleCopy[i] = !sortToggle[i]
-       setSortToggle(sortToggleCopy)
-       setData(dataCopy);
+      }
+      else {
+        dataCopy.items.sort((a, b) => b[val.value].localeCompare(a[val.value]));
+      }
+      console.log('temp else', val, dataCopy.items[0][val.value])
+      sortToggleCopy[i] = !sortToggle[i]
+      setSortToggle(sortToggleCopy)
+      setData(dataCopy);
     }
-    else if(val?.key === 'Created At' || val?.key === 'Updated At') {
-      if(!sortToggle[i]) {
+    else if (val?.key === 'Created At' || val?.key === 'Updated At') {
+      if (!sortToggle[i]) {
         dataCopy.items.sort((a, b) => new Date(a[val.value]) - new Date(b[val.value]));
-       }
-       else{
-         dataCopy.items.sort((a, b) => new Date(b[val.value]) - new Date(a[val.value]));
-       }
-       console.log('temp else', val, dataCopy.items[0][val.value])
-       sortToggleCopy[i] = !sortToggle[i]
-       setSortToggle(sortToggleCopy)
-       setData(dataCopy);
+      }
+      else {
+        dataCopy.items.sort((a, b) => new Date(b[val.value]) - new Date(a[val.value]));
+      }
+      console.log('temp else', val, dataCopy.items[0][val.value])
+      sortToggleCopy[i] = !sortToggle[i]
+      setSortToggle(sortToggleCopy)
+      setData(dataCopy);
     }
   }
 
@@ -99,35 +99,36 @@ export function DiceTask() {
           style={styles.inputStyle}
         />
       </View>
-      <View style={styles.sortContainer}>
-        <View style={styles.sortImg}>
-          <Image source={require('../assets/sortBlack.png')} style={styles.img} />
-          <Text style={{ color: 'black' }}>Sort</Text>
-        </View>
+      {data?.items && data?.items?.length > 0 &&
+        <View style={styles.sortContainer}>
+          <View style={styles.sortImg}>
+            <Image source={require('../assets/sortBlack.png')} style={styles.img} />
+            <Text style={{ color: 'black' }}>Sort</Text>
+          </View>
+          <FlatList
+            data={sortArr}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            renderItem={({ item, index }) => (
+              <View style={{ marginLeft: 5 }}>
+                <Pressable
+                  onPress={() => onSortPress(item, index)}
+                  style={styles.pressContainer}>
+                  <Image source={require('../assets/sort.png')} style={styles.img} />
+                  <Text style={{ color: 'white' }}>{item.key}</Text>
+                </Pressable>
+              </View>
+            )}
+          />
+        </View>}
+      {data?.items && data?.items?.length > 0 &&
         <FlatList
-          data={sortArr}
-          keyExtractor={(item,index)=>index.toString()}
-          horizontal
-          renderItem={({ item, index }) => (
-            <View style={{ marginLeft: 5 }}>
-              <Pressable
-                onPress={() => onSortPress(item,index)}
-                style={styles.pressContainer}>
-                <Image source={require('../assets/sort.png')} style={styles.img} />
-                <Text style={{ color: 'white' }}>{item.key}</Text>
-              </Pressable>
-            </View>
-          )}
+          data={data?.items}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.flatlistStyle}
+          renderItem={({ item, index }) => <Card item={item} index={index} />}
         />
-      </View>
-     {data?.items && data?.items?.length > 0 &&
-      <FlatList
-        data={data?.items}
-        keyExtractor={(item,index)=>index.toString()}
-        style={styles.flatlistStyle}
-        renderItem={({ item, index }) => <Card item={item} index={index}/>}
-      />
-     }
+      }
     </SafeAreaView>
   );
 }
