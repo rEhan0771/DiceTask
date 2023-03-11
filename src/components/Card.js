@@ -31,8 +31,8 @@ const Card = ({ item, index }) => {
                 </View>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                <Text>Created at: {moment(item.created_at).format('MMM DD YYYY')}</Text>
-                <Text>Updated on: {item.updated_at}</Text>
+                <Text style={styles.dateStyle}>Created at: {moment(item.created_at).format('MMM DD YYYY')}</Text>
+                <Text style={styles.dateStyle}>Updated on: {moment(item.updated_at).format('MMM DD YYYY')}</Text>
             </View>
         </View>
     )
